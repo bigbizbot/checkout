@@ -2,6 +2,9 @@ import * as fs from 'fs'
 import * as os from 'os'
 import * as path from 'path'
 import * as yaml from 'js-yaml'
+import {fileURLToPath} from 'url'
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 //
 // SUMMARY
@@ -10,17 +13,17 @@ import * as yaml from 'js-yaml'
 
 function updateUsage(
   actionReference: string,
-  actionYamlPath: string = 'action.yml',
-  readmePath: string = 'README.md',
-  startToken: string = '<!-- start usage -->',
-  endToken: string = '<!-- end usage -->'
+  actionYamlPath = 'action.yml',
+  readmePath = 'README.md',
+  startToken = '<!-- start usage -->',
+  endToken = '<!-- end usage -->'
 ): void {
   if (!actionReference) {
     throw new Error('Parameter actionReference must not be empty')
   }
 
   // Load the action.yml
-  const actionYaml = yaml.safeLoad(fs.readFileSync(actionYamlPath).toString())
+  const actionYaml = yaml.load(fs.readFileSync(actionYamlPath).toString())
 
   // Load the README
   const originalReadme = fs.readFileSync(readmePath).toString()
@@ -120,7 +123,7 @@ function updateUsage(
 }
 
 updateUsage(
-  'actions/checkout@v2',
+  'actions/checkout@v7',
   path.join(__dirname, '..', '..', 'action.yml'),
   path.join(__dirname, '..', '..', 'README.md')
 )
